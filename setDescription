@@ -1,0 +1,62 @@
+//--------------------------------------------------------------
+// AUTHOR: RYAN WILK
+// LAST UPDATE: 9/27/2017
+//
+// DESCRIPTION:
+// THIS PROGRAM SETS THE FORM DESCRIPTION TO DISPLAY THE AMOUNT 
+// SPENT SO FAR IN THE WEEK WEEK (SUN - SAT) AND THE AMOUNT 
+// REMAINING BASED ON THE WEEKLY BUDGET (SET IN var budget).
+//
+// WANTS:
+// -PULL UP NUMBERPAD ON NUMERIC VALUE ENTRY
+// -CHANGE FORM BG COLOR FROM GREEN TO RED BASED ON +/- 
+//  REMAINDER VALUE
+//--------------------------------------------------------------
+
+function setDescription() {
+  //SET BUDGET
+  var budget = 100;
+  
+  //LINK TO DATA SHEET
+  var form = FormApp.openById('1sQtZLge9PKjAGDyGTldvtmAmEFarR0C9J_rANPSM_S0');
+  var ss = SpreadsheetApp.openById('17E7kurH65VGB88jWJk2_KQaRsqR_lWCOLJV6c3KZRA4');
+  var sheet = ss.setActiveSheet(ss.getSheetByName("data"));
+  var endRow = sheet.getLastRow();
+  
+  //GET RANGE
+  var range = sheet.getRange("A2:C"+endRow);
+  var values = range.getValues();
+  
+  //CALC WEEK BUDGET VALUES
+  var total = getWeekTotal(values,endRow);
+  var remainder = getWeekRemainder(total, budget);
+  
+  //SET FORM DESCRIPTION
+  form.setDescription("SPENT THIS WEEK: $" + total + "\nAMOUNT REMAINING: $" + remainder ); 
+}
+
+function getWeekTotal(inputValues, lastRow) {
+  var sum = 0
+  for (var i=0; i <lastRow-1; i++){
+    var n = inputValues[i][1];
+    var d = new Date(inputValues[i][0]);
+    var p = new Date();
+    var m = d.getMonth();
+    var y = d.getYear();
+    var catagory = inputValues[i][2];
+    
+    for (var j=2; j<7;j++) {
+     if (m==p.getMonth() && y==p.getYear() && catagory != "Bill" && d.getDay()== j && d.getDate() >= p.getDate()-p.getDay()){
+       sum = Number(sum)+Number(n);
+     }
+   }
+  }
+  Logger.log(sum);
+  return sum.toFixed(2);
+}
+
+function getWeekRemainder(sum, bdgt) {
+  var remainder = bdgt-Number(sum);
+  Logger.log(remainder);
+  return remainder.toFixed(2);
+}
