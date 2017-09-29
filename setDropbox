@@ -1,3 +1,13 @@
+//--------------------------------------------------------------
+// AUTHOR: RYAN WILK
+// LAST UPDATE: 9/29/2017
+//
+// DESCRIPTION:
+// THIS PROGRAM SETS THE FORM DROPDOWN VALUES BASED ON THE
+// CATEGORIES LISTED IN THE GOOGLE SPREADSHEET. IT ALSO SORTS
+// THE OPTIONS IN ORDER OF MOST FREQUENTLY USED.
+//--------------------------------------------------------------
+
 function updateForm(){
   //FIND LIST OPTIONS
   var form = FormApp.openById("1sQtZLge9PKjAGDyGTldvtmAmEFarR0C9J_rANPSM_S0");
